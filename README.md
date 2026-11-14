@@ -1,4 +1,7 @@
 # IntelliClaim | Automated Vehicle Claim Adjudication Pipeline
+# ⚡ SparkGuard
+
+🔗 **Live Website Demo**: [spark-guard-two.vercel.app](https://spark-guard-two.vercel.app)
 
 An enterprise multi-modal AI claim adjudication system built with **Django REST Framework (DRF)**, **Neon DB (PostgreSQL)**, **OpenCV Computer Vision**, **Groq Llama 3 8B NLP**, and **React 19 (TypeScript + Tailwind CSS)**.
 
