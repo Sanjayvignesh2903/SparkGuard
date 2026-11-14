@@ -122,45 +122,45 @@ export const ClaimForm: React.FC<ClaimFormProps> = ({ onSuccess }) => {
       )}
 
       {/* Main Floating Dark Box on #454C83 Static Background */}
-      <div className="floating-dark-box thin-grade-border p-6 sm:p-8 relative overflow-hidden">
+      <div className="floating-dark-box thin-grade-border p-4 sm:p-8 relative overflow-hidden w-full">
         
         {/* Top illuminated cyan trim */}
-        <div className="h-1.5 -mt-8 -mx-8 mb-6 bg-gradient-to-r from-[#38bdf8] via-[#747EAD] to-[#ef4444]" />
+        <div className="h-1.5 -mt-4 sm:-mt-8 -mx-4 sm:-mx-8 mb-5 sm:mb-6 bg-gradient-to-r from-[#38bdf8] via-[#747EAD] to-[#ef4444]" />
 
         {/* Title Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 pb-6 border-b border-[#747EAD]/25">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 mb-5 sm:mb-6 pb-4 sm:pb-6 border-b border-[#747EAD]/25">
           <div>
-            <h2 className="text-xl font-orbitron font-extrabold italic tracking-wide text-white flex items-center space-x-2">
+            <h2 className="text-lg sm:text-xl font-orbitron font-extrabold italic tracking-wide text-white flex items-center space-x-2">
               <span>VEHICLE DAMAGE ADJUDICATION</span>
             </h2>
-            <p className="text-xs font-rajdhani font-bold text-[#B1B9D8] mt-1 tracking-wider uppercase">
+            <p className="text-[11px] sm:text-xs font-rajdhani font-bold text-[#B1B9D8] mt-1 tracking-wider uppercase">
               Upload physical damage imagery for instant OpenCV contour mapping and Groq LLM fraud analysis.
             </p>
           </div>
 
           {/* Quick Scenario Dark Pill Buttons */}
-          <div className="flex items-center flex-wrap gap-2">
-            <span className="text-[11px] font-rajdhani font-bold text-[#747EAD] uppercase mr-1">
+          <div className="flex items-center flex-wrap gap-1.5 sm:gap-2">
+            <span className="text-[10px] sm:text-[11px] font-rajdhani font-bold text-[#747EAD] uppercase mr-1">
               Quick Scenarios:
             </span>
             <button
               type="button"
               onClick={() => loadSampleScenario('minor')}
-              className="dark-pill text-[11px] font-rajdhani font-bold px-4 py-1.5 rounded-full text-[#E7EAF5]"
+              className="dark-pill text-[10px] sm:text-[11px] font-rajdhani font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[#E7EAF5]"
             >
               Minor Scuff
             </button>
             <button
               type="button"
               onClick={() => loadSampleScenario('critical')}
-              className="dark-pill text-[11px] font-rajdhani font-bold px-4 py-1.5 rounded-full text-[#38bdf8]"
+              className="dark-pill text-[10px] sm:text-[11px] font-rajdhani font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[#38bdf8]"
             >
               Severe Crash
             </button>
             <button
               type="button"
               onClick={() => loadSampleScenario('fraud')}
-              className="dark-pill text-[11px] font-rajdhani font-bold px-4 py-1.5 rounded-full text-rose-300"
+              className="dark-pill text-[10px] sm:text-[11px] font-rajdhani font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-rose-300"
             >
               Suspicious Claim
             </button>
@@ -193,7 +193,7 @@ export const ClaimForm: React.FC<ClaimFormProps> = ({ onSuccess }) => {
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`border-2 border-dashed rounded-[26px] p-8 text-center cursor-pointer transition-all ${
+                className={`border-2 border-dashed rounded-[22px] sm:rounded-[26px] p-4 sm:p-8 text-center cursor-pointer transition-all ${
                   isDragging
                     ? 'border-[#38bdf8] bg-[#15162B] shadow-2xl'
                     : 'border-[#292D54] hover:border-[#38bdf8] bg-[#15162B]/80 shadow-lg'
@@ -206,22 +206,22 @@ export const ClaimForm: React.FC<ClaimFormProps> = ({ onSuccess }) => {
                   className="hidden"
                   onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])}
                 />
-                <div className="w-14 h-14 rounded-2xl bg-[#202447] border border-[#747EAD]/40 text-[#38bdf8] flex items-center justify-center mx-auto mb-3 floating-icon-badge shadow-xl">
-                  <UploadCloud className="w-7 h-7 icon-shadow" />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#202447] border border-[#747EAD]/40 text-[#38bdf8] flex items-center justify-center mx-auto mb-2.5 sm:mb-3 floating-icon-badge shadow-xl">
+                  <UploadCloud className="w-6 h-6 sm:w-7 sm:h-7 icon-shadow" />
                 </div>
-                <p className="text-sm font-rajdhani font-bold text-white tracking-wide">
+                <p className="text-xs sm:text-sm font-rajdhani font-bold text-white tracking-wide">
                   Click to browse or drag and drop damage photo here
                 </p>
-                <p className="text-xs text-[#747EAD] mt-1 font-mono">
+                <p className="text-[11px] sm:text-xs text-[#747EAD] mt-1 font-mono">
                   Supports PNG, JPG, JPEG, WEBP (Max 15MB)
                 </p>
-                <div className="mt-3 flex items-center justify-center space-x-2 text-[11px] font-rajdhani text-[#B1B9D8]">
-                  <Cpu className="w-3.5 h-3.5 text-[#38bdf8] icon-shadow" />
-                  <span>Processed via in-memory Gaussian Blur (7x7) & Canny contour detection</span>
+                <div className="mt-2.5 sm:mt-3 flex items-center justify-center space-x-1.5 sm:space-x-2 text-[10px] sm:text-[11px] font-rajdhani text-[#B1B9D8]">
+                  <Cpu className="w-3.5 h-3.5 text-[#38bdf8] icon-shadow shrink-0" />
+                  <span className="leading-tight">Processed via in-memory Gaussian Blur (7x7) & Canny contour detection</span>
                 </div>
               </div>
             ) : (
-              <div className="relative rounded-[26px] overflow-hidden border border-[#292D54] bg-[#15162B] max-h-72 flex items-center justify-center group shadow-xl">
+              <div className="relative rounded-[22px] sm:rounded-[26px] overflow-hidden border border-[#292D54] bg-[#15162B] max-h-72 flex items-center justify-center group shadow-xl">
                 <img
                   src={previewUrl}
                   alt="Selected Damage"
@@ -257,15 +257,15 @@ export const ClaimForm: React.FC<ClaimFormProps> = ({ onSuccess }) => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe collision kinematics, speed, impacted components, weather, and road conditions..."
-                className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-[22px] p-4 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all resize-none leading-relaxed font-sans shadow-inner"
+                className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-[22px] p-3.5 sm:p-4 text-xs sm:text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all resize-none leading-relaxed font-sans shadow-inner"
               />
             </div>
-            <div className="flex justify-between items-center text-xs text-[#747EAD] mt-1.5 font-mono font-semibold">
-              <div className="flex items-center space-x-1 text-[11px]">
-                <Sparkles className="w-3.5 h-3.5 text-[#38bdf8] icon-shadow" />
-                <span>Zero-shot physics & staged accident fraud detection powered by Groq Llama 3</span>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 text-[11px] sm:text-xs text-[#747EAD] mt-1.5 font-mono font-semibold">
+              <div className="flex items-center space-x-1">
+                <Sparkles className="w-3.5 h-3.5 text-[#38bdf8] icon-shadow shrink-0" />
+                <span className="leading-tight">Zero-shot physics & staged accident fraud detection powered by Groq Llama 3</span>
               </div>
-              <span>{description.length} chars</span>
+              <span className="shrink-0">{description.length} chars</span>
             </div>
           </div>
 
@@ -274,10 +274,10 @@ export const ClaimForm: React.FC<ClaimFormProps> = ({ onSuccess }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="dark-pill-active group relative w-full overflow-hidden py-4 px-6 rounded-full font-rajdhani font-bold text-sm tracking-wider text-white disabled:opacity-60 transition-all flex items-center justify-center space-x-2 shadow-2xl"
+              className="dark-pill-active group relative w-full overflow-hidden py-3.5 sm:py-4 px-4 sm:px-6 rounded-full font-rajdhani font-bold text-xs sm:text-sm tracking-wider text-white disabled:opacity-60 transition-all flex items-center justify-center space-x-2 shadow-2xl"
             >
-              <Zap className="w-4 h-4 text-[#38bdf8] group-hover:scale-110 transition-transform icon-shadow" />
-              <span>RUN AUTOMATED AI ADJUDICATION PIPELINE</span>
+              <Zap className="w-4 h-4 text-[#38bdf8] group-hover:scale-110 transition-transform icon-shadow shrink-0" />
+              <span className="truncate">RUN AUTOMATED AI ADJUDICATION PIPELINE</span>
             </button>
           </div>
 

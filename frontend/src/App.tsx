@@ -31,9 +31,9 @@ const MainLayout: React.FC = () => {
       return <SparkGuard onLoginSuccess={() => {}} />;
     }
     return (
-      <div className="min-h-screen bg-[#454C83] flex flex-col font-sans">
+      <div className="min-h-screen bg-[#454C83] flex flex-col font-sans w-full max-w-full overflow-x-hidden">
         <Navbar />
-        <main className="flex-1">
+        <main className="flex-1 w-full max-w-full overflow-x-hidden">
           <Login />
         </main>
       </div>
@@ -42,9 +42,9 @@ const MainLayout: React.FC = () => {
 
   // Logged in -> Portal with #454C83 static background and floating dark boxes
   return (
-    <div className="min-h-screen bg-[#454C83] flex flex-col font-sans text-[#E7EAF5]">
+    <div className="min-h-screen bg-[#454C83] flex flex-col font-sans text-[#E7EAF5] w-full max-w-full overflow-x-hidden">
       <Navbar />
-      <main className="flex-1 pb-16">
+      <main className="flex-1 pb-16 w-full max-w-full overflow-x-hidden">
         {role === 'ADJUSTER' ? <AdminHub /> : <CustomerDashboard />}
       </main>
     </div>

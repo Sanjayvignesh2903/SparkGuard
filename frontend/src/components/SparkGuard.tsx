@@ -146,16 +146,16 @@ export const SparkGuard: React.FC<SparkGuardProps> = ({ onLoginSuccess }) => {
       {/* 3. LOGIN PAGE: FLOATING DARK BOX ON #454C83 STATIC BACKGROUND */}
       {/* ============================================================== */}
       {screen === 'login' && !isLoading && (
-        <div className="relative min-h-screen w-full bg-[#454C83] flex items-center justify-center p-4 sm:p-6 overflow-hidden animate-in fade-in duration-700">
+        <div className="relative min-h-screen w-full bg-[#454C83] flex items-center justify-center p-3 sm:p-6 overflow-hidden animate-in fade-in duration-700">
           
-          {/* Thin Framing Border Around Login Page Viewport in Palette Grade */}
-          <div className="fixed inset-3 sm:inset-5 pointer-events-none border border-[#747EAD]/30 rounded-[32px] z-10" />
+          {/* Thin Framing Border Around Login Page Viewport in Palette Grade (desktop only) */}
+          <div className="fixed inset-3 sm:inset-5 pointer-events-none border border-[#747EAD]/30 rounded-[32px] z-10 hidden sm:block" />
 
           {/* Subtle ambient lighting behind floating dark card */}
-          <div className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#747EAD]/25 via-[#292D54]/30 to-transparent blur-[140px] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 sm:w-[500px] sm:h-[500px] rounded-full bg-gradient-to-br from-[#747EAD]/25 via-[#292D54]/30 to-transparent blur-[90px] sm:blur-[140px] pointer-events-none" />
 
           {/* Floating Dark Box with Thin Palette-Grade Hairline Border */}
-          <div className="floating-dark-box thin-grade-border relative z-30 w-full max-w-md p-7 sm:p-9 overflow-hidden">
+          <div className="floating-dark-box thin-grade-border relative z-30 w-full max-w-md p-5 sm:p-9 overflow-hidden">
             
             {/* Top illuminated cyan trim */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#38bdf8] via-[#747EAD] to-[#ef4444]" />

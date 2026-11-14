@@ -122,7 +122,7 @@ export const AdminHub: React.FC = () => {
   });
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-[#454C83] text-[#E7EAF5] px-4 sm:px-6 lg:px-8 py-8 font-sans">
+    <div className="min-h-[calc(100vh-4rem)] bg-[#454C83] text-[#E7EAF5] px-3 sm:px-6 lg:px-8 py-5 sm:py-8 font-sans w-full max-w-full overflow-x-hidden">
       
       {/* Floating Dark Command Header */}
       <div className="floating-dark-box p-6 sm:p-7 mb-6 relative overflow-hidden">

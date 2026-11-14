@@ -78,10 +78,10 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({ data, onClose,
   const fraudStyle = getFraudRiskBadge(fraudRisk);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       
       {/* Modal Container with User's Exact Palette & Cohesive Curves */}
-      <div className="bg-[#15162B] border-2 border-[#454C83] rounded-[28px] max-w-2xl w-full p-6 sm:p-8 shadow-[0_25px_70px_rgba(0,0,0,0.9)] relative overflow-hidden max-h-[92vh] overflow-y-auto">
+      <div className="bg-[#15162B] border-2 border-[#454C83] rounded-[24px] sm:rounded-[28px] max-w-2xl w-full p-4 sm:p-8 shadow-[0_25px_70px_rgba(0,0,0,0.9)] relative overflow-hidden max-h-[92vh] overflow-y-auto">
         
         {/* Top cyan-to-red trim */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#38bdf8] via-[#747EAD] to-[#ef4444]" />

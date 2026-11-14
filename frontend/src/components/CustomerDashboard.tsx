@@ -61,49 +61,49 @@ export const CustomerDashboard: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] bg-[#454C83] text-[#E7EAF5] px-4 sm:px-6 lg:px-8 py-8 overflow-hidden font-sans">
+    <div className="relative min-h-[calc(100vh-4rem)] bg-[#454C83] text-[#E7EAF5] px-3 sm:px-6 lg:px-8 py-5 sm:py-8 overflow-x-hidden w-full max-w-full font-sans">
       
-      {/* Very Thin Precision Border in Theme Grade Framing the Home Page */}
-      <div className="fixed inset-3 sm:inset-5 pointer-events-none border border-[#747EAD]/25 rounded-[36px] z-0" />
+      {/* Very Thin Precision Border in Theme Grade Framing the Home Page (desktop/tablet only) */}
+      <div className="fixed inset-3 sm:inset-5 pointer-events-none border border-[#747EAD]/25 rounded-[36px] z-0 hidden sm:block" />
 
-      {/* Background Soft Ambient Lighting for Floating Depth */}
-      <div className="absolute top-10 left-10 w-[80vw] h-[80vw] max-w-[550px] max-h-[550px] bg-[#747EAD]/20 rounded-full blur-[140px] pointer-events-none" />
-              <div className="absolute bottom-10 right-10 w-[80vw] h-[80vw] sm:w-[550px] sm:h-[550px] bg-[#292D54]/35 rounded-full blur-[150px] pointer-events-none" />
+      {/* Background Soft Ambient Lighting for Floating Depth - strictly centered to prevent horizontal overflow */}
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-72 h-72 sm:w-[500px] sm:h-[500px] bg-[#747EAD]/20 rounded-full blur-[90px] sm:blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-72 h-72 sm:w-[500px] sm:h-[500px] bg-[#292D54]/35 rounded-full blur-[90px] sm:blur-[150px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto relative z-10 space-y-6">
+      <div className="max-w-7xl mx-auto relative z-10 space-y-6 w-full max-w-full">
         
         {/* ============================================================== */}
         {/* FLOATING DARK COCKPIT HUD SLAB WITH THIN THEME-GRADE BORDER    */}
         {/* ============================================================== */}
-        <div className="floating-dark-box thin-grade-border p-6 sm:p-7 relative overflow-hidden">
+        <div className="floating-dark-box thin-grade-border p-4 sm:p-7 relative overflow-hidden w-full">
           
           {/* Top illuminated cyan accent trim */}
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#38bdf8] via-[#747EAD] to-[#ef4444]" />
 
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pt-1">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6 pt-1">
             
             {/* Driver & Vehicle Identity with Floating Icon */}
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 rounded-[24px] bg-[#15162B] border border-[#747EAD]/40 p-2 flex items-center justify-center floating-icon-badge shrink-0">
-                <Car className="w-8 h-8 text-[#38bdf8] icon-shadow" />
+            <div className="flex items-center space-x-3 sm:space-x-4">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl sm:rounded-[24px] bg-[#15162B] border border-[#747EAD]/40 p-1.5 sm:p-2 flex items-center justify-center floating-icon-badge shrink-0">
+                <Car className="w-6 h-6 sm:w-8 sm:h-8 text-[#38bdf8] icon-shadow" />
               </div>
-              <div>
-                <div className="flex items-center space-x-2 text-[#38bdf8] text-xs font-semibold uppercase tracking-wider mb-0.5">
-                  <SparkGuardMark size={14} className="icon-shadow" />
-                  <span className="font-rajdhani font-bold tracking-widest">VEHICLE TELEMETRY COCKPIT</span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center space-x-1.5 sm:space-x-2 text-[#38bdf8] text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-0.5">
+                  <SparkGuardMark size={14} className="icon-shadow shrink-0" />
+                  <span className="font-rajdhani font-bold tracking-widest truncate">VEHICLE TELEMETRY COCKPIT</span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-orbitron font-extrabold italic text-white tracking-tight">
+                <h1 className="text-xl sm:text-3xl font-orbitron font-extrabold italic text-white tracking-tight truncate">
                   Welcome, {user?.username}!
                 </h1>
-                <p className="text-xs font-mono text-[#B1B9D8] tracking-wider mt-0.5 font-semibold">
+                <p className="text-[10px] sm:text-xs font-mono text-[#B1B9D8] tracking-wider mt-0.5 font-semibold break-words">
                   POLICY #{user?.policy_number || 'POL-DL-2025-44910'} • COMPREHENSIVE COVERAGE ACTIVE
                 </p>
               </div>
             </div>
 
             {/* Live Telemetry Sensor Gauges with Floating Icons */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <div className="dark-pill px-4 py-2.5 flex items-center space-x-3">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 w-full lg:w-auto">
+              <div className="dark-pill px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center space-x-3">
                 <Radio className="w-4 h-4 text-emerald-400 animate-pulse shrink-0 icon-shadow" />
                 <div>
                   <span className="text-[10px] font-rajdhani uppercase font-bold text-[#B1B9D8] block">CAN Telemetry</span>
@@ -111,7 +111,7 @@ export const CustomerDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="dark-pill px-4 py-2.5 flex items-center space-x-3">
+              <div className="dark-pill px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center space-x-3">
                 <Gauge className="w-4 h-4 text-[#38bdf8] shrink-0 icon-shadow" />
                 <div>
                   <span className="text-[10px] font-rajdhani uppercase font-bold text-[#B1B9D8] block">CV Edge Sensor</span>
@@ -119,7 +119,7 @@ export const CustomerDashboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="dark-pill px-4 py-2.5 flex items-center space-x-3 col-span-2 sm:col-span-1">
+              <div className="dark-pill px-3.5 sm:px-4 py-2 sm:py-2.5 flex items-center space-x-3 xs:col-span-2 sm:col-span-1">
                 <Zap className="w-4 h-4 text-amber-400 shrink-0 icon-shadow" />
                 <div>
                   <span className="text-[10px] font-rajdhani uppercase font-bold text-[#B1B9D8] block">LLM Reasoning</span>
@@ -134,34 +134,34 @@ export const CustomerDashboard: React.FC = () => {
         {/* ============================================================== */}
         {/* NAVIGATION TABS: FLOATING TRAY WITH THIN THEME BORDER          */}
         {/* ============================================================== */}
-        <div className="flex items-center justify-between flex-wrap gap-4 pt-1">
-          <div className="bg-[#15162B] p-1.5 rounded-full border border-[#747EAD]/30 flex items-center shadow-2xl">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-1 w-full">
+          <div className="bg-[#15162B] p-1 rounded-full border border-[#747EAD]/30 flex items-center shadow-2xl w-full sm:w-auto">
             <button
               onClick={() => setActiveTab('new_claim')}
-              className={`flex items-center space-x-2 px-6 py-2.5 rounded-full font-rajdhani font-bold text-xs tracking-wider transition-all ${
+              className={`flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-full font-rajdhani font-bold text-[11px] sm:text-xs tracking-wider transition-all ${
                 activeTab === 'new_claim'
                   ? 'dark-pill-active'
                   : 'text-[#747EAD] hover:text-[#E7EAF5]'
               }`}
             >
-              <PlusCircle className="w-4 h-4 text-[#38bdf8] icon-shadow" />
-              <span>FILE NEW DAMAGE CLAIM</span>
+              <PlusCircle className="w-3.5 h-3.5 text-[#38bdf8] icon-shadow shrink-0" />
+              <span className="whitespace-nowrap">NEW CLAIM</span>
             </button>
             <button
               onClick={() => setActiveTab('my_claims')}
-              className={`flex items-center space-x-2 px-6 py-2.5 rounded-full font-rajdhani font-bold text-xs tracking-wider transition-all ${
+              className={`flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-full font-rajdhani font-bold text-[11px] sm:text-xs tracking-wider transition-all ${
                 activeTab === 'my_claims'
                   ? 'dark-pill-active'
                   : 'text-[#747EAD] hover:text-[#E7EAF5]'
               }`}
             >
-              <Clock className="w-4 h-4 text-[#38bdf8] icon-shadow" />
-              <span>MY CLAIMS HISTORY ({claims.length})</span>
+              <Clock className="w-3.5 h-3.5 text-[#38bdf8] icon-shadow shrink-0" />
+              <span className="whitespace-nowrap">MY CLAIMS ({claims.length})</span>
             </button>
           </div>
 
-          <div className="flex items-center space-x-2 text-xs font-mono text-[#E7EAF5] font-bold">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+          <div className="flex items-center space-x-2 text-[11px] sm:text-xs font-mono text-[#E7EAF5] font-bold">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
             <span className="uppercase tracking-widest font-rajdhani font-bold text-[#E7EAF5]">
               Actuarial IRDAI Engine: Connected
             </span>
