@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #454C83;
+    color: #E7EAF5;
+  }
+
+  /* Custom sleek ultra-thin theme-matching scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #454C83;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #747EAD;
+    border-radius: 9999px;
+    border: 1px solid #B1B9D8;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B1B9D8;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #747EAD #454C83;
+  }
+}
+
+/* 3D Automotive Perspective Utilities */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-1200 {
+  perspective: 1200px;
+}
+
+/* ============================================================== */
+/* FLOATING LIVING-LIFE DARK BOXES ON #454C83 STATIC BACKGROUND   */
+/* ============================================================== */
+
+/* Thin Precision Border in Theme Grade (#747EAD / #B1B9D8) */
+.thin-grade-border {
+  border: 1px solid rgba(177, 185, 216, 0.4);
+  box-shadow: 
+    0 0 0 1px rgba(116, 126, 173, 0.2),
+    0 24px 60px -15px rgba(10, 11, 24, 0.75),
+    0 10px 24px -6px rgba(10, 11, 24, 0.5),
+    inset 0 1px 1px rgba(231, 234, 245, 0.2);
+}
+
+/* Main Operational Slabs (Cockpit, Dossier, Claim Form, Login) */
+.floating-dark-box {
+  background: linear-gradient(180deg, #202447 0%, #15162B 100%);
+  border: 1px solid rgba(177, 185, 216, 0.38);
+  box-shadow: 
+    0 0 0 1px rgba(116, 126, 173, 0.2),
+    0 28px 65px -15px rgba(10, 11, 24, 0.75),
+    0 12px 28px -6px rgba(10, 11, 24, 0.5),
+    inset 0 1px 1px rgba(231, 234, 245, 0.2);
+  border-radius: 28px;
+  color: #E7EAF5;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-dark-box:hover {
+  box-shadow: 
+    0 0 0 1px rgba(56, 189, 248, 0.4),
+    0 36px 80px -15px rgba(10, 11, 24, 0.85),
+    0 16px 36px -6px rgba(10, 11, 24, 0.6),
+    inset 0 1px 1px rgba(231, 234, 245, 0.3);
+  border-color: rgba(56, 189, 248, 0.6);
+}
+
+/* Individual Grid Claim Cards (Floating & Alive) */
+.floating-dark-card {
+  background: linear-gradient(180deg, #292D54 0%, #181a34 100%);
+  border: 1px solid rgba(177, 185, 216, 0.32);
+  box-shadow: 
+    0 0 0 1px rgba(116, 126, 173, 0.18),
+    0 16px 40px -10px rgba(10, 11, 24, 0.6),
+    0 8px 18px -4px rgba(10, 11, 24, 0.4),
+    inset 0 1px 1px rgba(231, 234, 245, 0.15);
+  border-radius: 22px;
+  color: #E7EAF5;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-dark-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 0 0 1px rgba(56, 189, 248, 0.5),
+    0 24px 50px -10px rgba(10, 11, 24, 0.75),
+    0 12px 24px -4px rgba(10, 11, 24, 0.5),
+    0 0 22px rgba(56, 189, 248, 0.3);
+  border-color: #38bdf8;
+}
+
+/* Floating Icon Badges with Distinct Underglow & Drop Shadow */
+.floating-icon-badge {
+  box-shadow: 
+    0 10px 22px -3px rgba(10, 11, 24, 0.75),
+    0 4px 8px -2px rgba(10, 11, 24, 0.5),
+    inset 0 1px 1px rgba(231, 234, 245, 0.25);
+  transform: translateY(-2px);
+  transition: all 0.22s ease-out;
+}
+
+.floating-icon-badge:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 14px 28px -3px rgba(10, 11, 24, 0.85),
+    0 6px 12px -2px rgba(10, 11, 24, 0.6),
+    0 0 16px rgba(56, 189, 248, 0.4);
+}
+
+.icon-shadow {
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.65));
+}
+
+/* Tactile Dark Pill Buttons */
+.dark-pill {
+  background: linear-gradient(180deg, #2c325c 0%, #181a33 100%);
+  color: #E7EAF5;
+  border: 1px solid rgba(177, 185, 216, 0.35);
+  box-shadow: 
+    0 4px 12px rgba(10, 11, 24, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.6);
+  border-radius: 9999px;
+  transition: all 0.18s ease-out;
+}
+
+.dark-pill:hover {
+  background: linear-gradient(180deg, #373e72 0%, #202347 100%);
+  border-color: #B1B9D8;
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 16px rgba(10, 11, 24, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.28);
+}
+
+.dark-pill:active {
+  transform: translateY(1px);
+  box-shadow: 
+    inset 0 3px 6px rgba(0, 0, 0, 0.7),
+    0 2px 4px rgba(10, 11, 24, 0.3);
+}
+
+/* Active Dark Pill with Electric Cyan Indicator */
+.dark-pill-active {
+  background: linear-gradient(180deg, #292D54 0%, #15162B 100%);
+  color: #ffffff;
+  border: 1px solid #38bdf8;
+  box-shadow: 
+    0 0 20px rgba(56, 189, 248, 0.45),
+    0 6px 16px rgba(10, 11, 24, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.35);
+  border-radius: 9999px;
+}
+
+/* Dark Recessed Inset Elements (Input fields & search bars) */
+.dark-recessed {
+  background: #15162B;
+  border: 1px solid #292D54;
+  box-shadow: 
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 1px 1px rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  color: #E7EAF5;
+}
+
+.dark-recessed:focus-within {
+  border-color: #38bdf8;
+  box-shadow: 
+    0 0 14px rgba(56, 189, 248, 0.3),
+    inset 0 2px 6px rgba(0, 0, 0, 0.6);
+}
