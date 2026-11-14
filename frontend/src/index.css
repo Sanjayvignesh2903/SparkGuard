@@ -185,3 +185,55 @@
     0 0 14px rgba(56, 189, 248, 0.3),
     inset 0 2px 6px rgba(0, 0, 0, 0.6);
 }
+/* -------------------------------------------------
+   Mobile‑first responsive fixes (added automatically)
+   ------------------------------------------------- */
+
+/* Ensure all images and svgs never overflow their container */
+img, svg, picture {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Responsive grid for claim cards – 1 column on tiny screens */
+@media (max-width: 480px) {
+  .cards-container {
+    display: block; /* fallback to block stacking */
+  }
+}
+
+/* Two‑column layout on small tablets */
+@media (min-width: 481px) and (max-width: 768px) {
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Three‑column layout on larger screens */
+@media (min-width: 769px) {
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Make the login form and any modal dialogs full‑width on mobile */
+@media (max-width: 600px) {
+  .login-form, .modal-dialog {
+    width: 100% !important;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+}
+
+/* Reduce the thickness of the thin‑grade‑border on very small screens */
+@media (max-width: 400px) {
+  .thin-grade-border {
+    border-width: 0.5px;
+    border-radius: 0.5rem;
+  }
+}
