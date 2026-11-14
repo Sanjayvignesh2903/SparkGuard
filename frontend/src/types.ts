@@ -13,6 +13,15 @@ export interface User {
   policy_number?: string;
 }
 
+export interface RegisterData {
+  username: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  phone_number?: string;
+  policy_number?: string;
+}
+
 export interface Claim {
   id: number;
   claim_id: string;

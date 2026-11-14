@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, UserRole } from '../types';
+import { User, UserRole, RegisterData } from '../types';
 import { api } from '../services/api';
 
 interface AuthContextType {
@@ -8,6 +8,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (username: string, password: string) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   logout: () => void;
   setDemoUser: (role: UserRole) => void;
 }
@@ -63,6 +64,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const register = async (data: RegisterData) => {
+    setIsLoading(true);
+    try {
+      const authData = await api.register(data);
+      setUser(authData.user);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const logout = () => {
     api.logout();
     setUser(null);
@@ -99,6 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: !!user,
         isLoading,
         login,
+        register,
         logout,
         setDemoUser,
       }}

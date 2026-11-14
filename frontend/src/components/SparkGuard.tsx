@@ -11,7 +11,11 @@ import {
   Zap, 
   AlertCircle,
   Eye,
-  EyeOff
+  EyeOff,
+  Mail,
+  Phone,
+  FileText,
+  UserPlus
 } from 'lucide-react';
 
 interface SparkGuardProps {
@@ -19,15 +23,21 @@ interface SparkGuardProps {
 }
 
 export const SparkGuard: React.FC<SparkGuardProps> = ({ onLoginSuccess }) => {
-  const { login, setDemoUser } = useAuth();
+  const { login, register, setDemoUser } = useAuth();
 
   const [screen, setScreen] = useState<'intro' | 'login'>('intro');
   const [introOpacity, setIntroOpacity] = useState(false);
 
+  // Auth Mode: 'signin' or 'register'
+  const [authMode, setAuthMode] = useState<'signin' | 'register'>('signin');
+
   // Login Form States
   const [selectedRole, setSelectedRole] = useState<UserRole>('POLICYHOLDER');
   const [username, setUsername] = useState('policyholder_priya');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('Claim@123');
+  const [policyNumber, setPolicyNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -56,12 +66,34 @@ export const SparkGuard: React.FC<SparkGuardProps> = ({ onLoginSuccess }) => {
   const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role);
     setErrorMessage(null);
-    if (role === 'ADJUSTER') {
-      setUsername('adjuster_raj');
-      setPassword('Adjuster@123');
+    if (authMode === 'signin') {
+      if (role === 'ADJUSTER') {
+        setUsername('adjuster_raj');
+        setPassword('Adjuster@123');
+      } else {
+        setUsername('policyholder_priya');
+        setPassword('Claim@123');
+      }
+    }
+  };
+
+  const handleModeSwitch = (mode: 'signin' | 'register') => {
+    setAuthMode(mode);
+    setErrorMessage(null);
+    if (mode === 'register') {
+      setUsername('');
+      setPassword('');
+      setEmail('');
+      setPolicyNumber('');
+      setPhoneNumber('');
     } else {
-      setUsername('policyholder_priya');
-      setPassword('Claim@123');
+      if (selectedRole === 'ADJUSTER') {
+        setUsername('adjuster_raj');
+        setPassword('Adjuster@123');
+      } else {
+        setUsername('policyholder_priya');
+        setPassword('Claim@123');
+      }
     }
   };
 
@@ -83,6 +115,44 @@ export const SparkGuard: React.FC<SparkGuardProps> = ({ onLoginSuccess }) => {
         setIsLoading(false);
         if (onLoginSuccess) onLoginSuccess();
       }, 700);
+    }
+  };
+
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!username.trim()) {
+      setErrorMessage('Please enter a username.');
+      return;
+    }
+    if (!email.trim() || !email.includes('@')) {
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
+    if (password.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long.');
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage(null);
+
+    try {
+      await register({
+        username: username.trim(),
+        email: email.trim(),
+        password,
+        role: selectedRole,
+        policy_number: policyNumber.trim() || undefined,
+        phone_number: phoneNumber.trim() || undefined
+      });
+      setTimeout(() => {
+        setIsLoading(false);
+        if (onLoginSuccess) onLoginSuccess();
+      }, 700);
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      setErrorMessage(err.message || 'Registration failed. Please try again.');
+      setIsLoading(false);
     }
   };
 
@@ -161,16 +231,44 @@ export const SparkGuard: React.FC<SparkGuardProps> = ({ onLoginSuccess }) => {
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#38bdf8] via-[#747EAD] to-[#ef4444]" />
 
             {/* Header: Official SparkGuard Logo */}
-            <div className="text-center mb-7 pt-2 flex flex-col items-center">
+            <div className="text-center mb-6 pt-2 flex flex-col items-center">
               <SparkGuardLogo size="lg" showTagline={true} />
             </div>
 
+            {/* Mode Switcher Tabs: SIGN IN vs CREATE ACCOUNT */}
+            <div className="grid grid-cols-2 gap-2 p-1 bg-[#15162B] border border-[#747EAD]/30 rounded-full mb-5 shadow-inner">
+              <button
+                type="button"
+                onClick={() => handleModeSwitch('signin')}
+                className={`py-2 px-3 rounded-full font-rajdhani font-bold text-xs tracking-wider transition-all flex items-center justify-center space-x-1.5 ${
+                  authMode === 'signin'
+                    ? 'dark-pill-active text-white'
+                    : 'text-[#747EAD] hover:text-[#E7EAF5]'
+                }`}
+              >
+                <Lock className="w-3.5 h-3.5 icon-shadow" />
+                <span>SIGN IN</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleModeSwitch('register')}
+                className={`py-2 px-3 rounded-full font-rajdhani font-bold text-xs tracking-wider transition-all flex items-center justify-center space-x-1.5 ${
+                  authMode === 'register'
+                    ? 'dark-pill-active text-white'
+                    : 'text-[#747EAD] hover:text-[#E7EAF5]'
+                }`}
+              >
+                <UserPlus className="w-3.5 h-3.5 icon-shadow" />
+                <span>CREATE ACCOUNT</span>
+              </button>
+            </div>
+
             {/* Dark Pill Role Switcher */}
-            <div className="bg-[#15162B] p-1.5 rounded-full border border-[#747EAD]/30 flex items-center justify-between gap-1 mb-6 shadow-inner">
+            <div className="bg-[#15162B] p-1.5 rounded-full border border-[#747EAD]/30 flex items-center justify-between gap-1 mb-5 shadow-inner">
               <button
                 type="button"
                 onClick={() => handleRoleSelect('POLICYHOLDER')}
-                className={`flex-1 py-2.5 px-3 rounded-full font-rajdhani font-bold text-xs tracking-wider transition-all flex items-center justify-center space-x-2 ${
+                className={`flex-1 py-2 px-3 rounded-full font-rajdhani font-bold text-xs tracking-wider transition-all flex items-center justify-center space-x-2 ${
                   selectedRole === 'POLICYHOLDER'
                     ? 'dark-pill-active'
                     : 'text-[#747EAD] hover:text-[#E7EAF5]'
@@ -182,7 +280,7 @@ export const SparkGuard: React.FC<SparkGuardProps> = ({ onLoginSuccess }) => {
               <button
                 type="button"
                 onClick={() => handleRoleSelect('ADJUSTER')}
-                className={`flex-1 py-2.5 px-3 rounded-full font-rajdhani font-bold text-xs tracking-wider transition-all flex items-center justify-center space-x-2 ${
+                className={`flex-1 py-2 px-3 rounded-full font-rajdhani font-bold text-xs tracking-wider transition-all flex items-center justify-center space-x-2 ${
                   selectedRole === 'ADJUSTER'
                     ? 'dark-pill-active'
                     : 'text-[#747EAD] hover:text-[#E7EAF5]'
@@ -199,96 +297,237 @@ export const SparkGuard: React.FC<SparkGuardProps> = ({ onLoginSuccess }) => {
                 <AlertCircle className="w-4 h-4 shrink-0 text-red-400 mt-0.5 icon-shadow" />
                 <div className="flex-1">
                   <span>{errorMessage}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleInstantDemo(selectedRole)}
-                    className="block mt-1 underline text-red-300 font-semibold"
-                  >
-                    Click to launch instant demo session →
-                  </button>
+                  {authMode === 'signin' && (
+                    <button
+                      type="button"
+                      onClick={() => handleInstantDemo(selectedRole)}
+                      className="block mt-1 underline text-red-300 font-semibold"
+                    >
+                      Click to launch instant demo session →
+                    </button>
+                  )}
                 </div>
               </div>
             )}
 
-            {/* Login Form with Dark Obsidian Inputs */}
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
-              
-              {/* Username Input with Floating Icon */}
-              <div>
-                <label className="block font-rajdhani font-bold text-xs tracking-wider text-[#B1B9D8] uppercase mb-1.5">
-                  User Account / ID
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#747EAD]">
-                    <User className="w-4 h-4 icon-shadow" />
-                  </div>
-                  <input
-                    type="text"
-                    required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-full pl-10 pr-4 py-3 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all font-mono shadow-inner"
-                    placeholder="e.g. policyholder_priya"
-                  />
-                  <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+            {authMode === 'signin' ? (
+              /* ================= SIGN IN FORM ================= */
+              <form onSubmit={handleLoginSubmit} className="space-y-4">
+                
+                {/* Username Input with Floating Icon */}
+                <div>
+                  <label className="block font-rajdhani font-bold text-xs tracking-wider text-[#B1B9D8] uppercase mb-1.5">
+                    User Account / ID
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#747EAD]">
+                      <User className="w-4 h-4 icon-shadow" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-full pl-10 pr-4 py-3 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all font-mono shadow-inner"
+                      placeholder="e.g. policyholder_priya"
+                    />
+                    <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Password Input with Floating Icon */}
-              <div>
-                <label className="block font-rajdhani font-bold text-xs tracking-wider text-[#B1B9D8] uppercase mb-1.5">
-                  Security Passkey
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#747EAD]">
-                    <Lock className="w-4 h-4 icon-shadow" />
+                {/* Password Input with Floating Icon */}
+                <div>
+                  <label className="block font-rajdhani font-bold text-xs tracking-wider text-[#B1B9D8] uppercase mb-1.5">
+                    Security Passkey
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#747EAD]">
+                      <Lock className="w-4 h-4 icon-shadow" />
+                    </div>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-full pl-10 pr-10 py-3 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all font-mono shadow-inner"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#747EAD] hover:text-[#E7EAF5]"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4 icon-shadow" /> : <Eye className="w-4 h-4 icon-shadow" />}
+                    </button>
                   </div>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-full pl-10 pr-10 py-3 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all font-mono shadow-inner"
-                    placeholder="••••••••"
-                  />
+                </div>
+
+                {/* Remember Me */}
+                <div className="flex items-center justify-between text-xs font-rajdhani text-[#B1B9D8] pt-1">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      defaultChecked 
+                      className="rounded bg-[#15162B] border-[#454C83] text-[#38bdf8] focus:ring-0" 
+                    />
+                    <span>Remember Session</span>
+                  </label>
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#747EAD] hover:text-[#E7EAF5]"
+                    onClick={() => handleModeSwitch('register')}
+                    className="text-[#38bdf8] hover:underline font-semibold"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4 icon-shadow" /> : <Eye className="w-4 h-4 icon-shadow" />}
+                    Need an account?
                   </button>
                 </div>
-              </div>
 
-              {/* Remember Me */}
-              <div className="flex items-center justify-between text-xs font-rajdhani text-[#B1B9D8] pt-1">
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    defaultChecked 
-                    className="rounded bg-[#15162B] border-[#454C83] text-[#38bdf8] focus:ring-0" 
-                  />
-                  <span>Remember Session</span>
-                </label>
-                <span className="text-[#747EAD] hover:text-[#38bdf8] cursor-pointer">
-                  Forgot Password?
-                </span>
-              </div>
+                {/* Dark Pill Sign In Button */}
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="dark-pill-active group relative w-full overflow-hidden mt-3 py-3.5 px-4 rounded-full font-rajdhani font-bold tracking-wider text-sm text-white flex items-center justify-center space-x-2 disabled:opacity-75 shadow-xl"
+                >
+                  <Zap className="w-4 h-4 text-[#38bdf8] group-hover:scale-110 transition-transform icon-shadow" />
+                  <span>SECURE SIGN IN</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform icon-shadow" />
+                </button>
+              </form>
+            ) : (
+              /* ================= CREATE ACCOUNT / REGISTER FORM ================= */
+              <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
+                
+                {/* Username Input */}
+                <div>
+                  <label className="block font-rajdhani font-bold text-xs tracking-wider text-[#B1B9D8] uppercase mb-1">
+                    Choose Username <span className="text-[#38bdf8]">*</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#747EAD]">
+                      <User className="w-4 h-4 icon-shadow" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-full pl-10 pr-4 py-2.5 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all font-mono shadow-inner"
+                      placeholder="e.g. rahul_verma"
+                    />
+                  </div>
+                </div>
 
-              {/* Dark Pill Sign In Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="dark-pill-active group relative w-full overflow-hidden mt-3 py-3.5 px-4 rounded-full font-rajdhani font-bold tracking-wider text-sm text-white flex items-center justify-center space-x-2 disabled:opacity-75 shadow-xl"
-              >
-                <Zap className="w-4 h-4 text-[#38bdf8] group-hover:scale-110 transition-transform icon-shadow" />
-                <span>SECURE SIGN IN</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform icon-shadow" />
-              </button>
-            </form>
+                {/* Email Input */}
+                <div>
+                  <label className="block font-rajdhani font-bold text-xs tracking-wider text-[#B1B9D8] uppercase mb-1">
+                    Email Address <span className="text-[#38bdf8]">*</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#747EAD]">
+                      <Mail className="w-4 h-4 icon-shadow" />
+                    </div>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-full pl-10 pr-4 py-2.5 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all font-mono shadow-inner"
+                      placeholder="rahul@example.com"
+                    />
+                  </div>
+                </div>
+
+                {/* Password Input */}
+                <div>
+                  <label className="block font-rajdhani font-bold text-xs tracking-wider text-[#B1B9D8] uppercase mb-1">
+                    Create Password (min 6 chars) <span className="text-[#38bdf8]">*</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#747EAD]">
+                      <Lock className="w-4 h-4 icon-shadow" />
+                    </div>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      minLength={6}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-full pl-10 pr-10 py-2.5 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all font-mono shadow-inner"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#747EAD] hover:text-[#E7EAF5]"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4 icon-shadow" /> : <Eye className="w-4 h-4 icon-shadow" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Policy Number (for policyholder) */}
+                {selectedRole === 'POLICYHOLDER' && (
+                  <div>
+                    <label className="block font-rajdhani font-bold text-xs tracking-wider text-[#B1B9D8] uppercase mb-1">
+                      Vehicle Policy Number <span className="text-[#747EAD] text-[10px] lowercase">(optional)</span>
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#747EAD]">
+                        <FileText className="w-4 h-4 icon-shadow" />
+                      </div>
+                      <input
+                        type="text"
+                        value={policyNumber}
+                        onChange={(e) => setPolicyNumber(e.target.value)}
+                        className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-full pl-10 pr-4 py-2.5 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all font-mono shadow-inner"
+                        placeholder="e.g. POL-DL-2026-98765 (Auto-generated if blank)"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Phone Number */}
+                <div>
+                  <label className="block font-rajdhani font-bold text-xs tracking-wider text-[#B1B9D8] uppercase mb-1">
+                    Mobile Phone Number <span className="text-[#747EAD] text-[10px] lowercase">(optional)</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#747EAD]">
+                      <Phone className="w-4 h-4 icon-shadow" />
+                    </div>
+                    <input
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      className="w-full bg-[#15162B] border border-[#747EAD]/30 rounded-full pl-10 pr-4 py-2.5 text-sm text-[#E7EAF5] placeholder-[#747EAD] focus:outline-none focus:border-[#38bdf8] focus:ring-2 focus:ring-[#38bdf8]/30 transition-all font-mono shadow-inner"
+                      placeholder="+91 98765 43210"
+                    />
+                  </div>
+                </div>
+
+                {/* Dark Pill Register Button */}
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="dark-pill-active group relative w-full overflow-hidden mt-4 py-3.5 px-4 rounded-full font-rajdhani font-bold tracking-wider text-sm text-white flex items-center justify-center space-x-2 disabled:opacity-75 shadow-xl"
+                >
+                  <UserPlus className="w-4 h-4 text-[#38bdf8] group-hover:scale-110 transition-transform icon-shadow" />
+                  <span>REGISTER & ENTER PORTAL</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform icon-shadow" />
+                </button>
+
+                <div className="text-center pt-2">
+                  <button
+                    type="button"
+                    onClick={() => handleModeSwitch('signin')}
+                    className="text-xs font-rajdhani text-[#B1B9D8] hover:text-[#38bdf8] transition-colors"
+                  >
+                    Already have an account? <span className="underline font-bold text-[#38bdf8]">Sign In here →</span>
+                  </button>
+                </div>
+              </form>
+            )}
 
             {/* Instant Demo Launchers */}
             <div className="mt-6 pt-5 border-t border-[#747EAD]/25">

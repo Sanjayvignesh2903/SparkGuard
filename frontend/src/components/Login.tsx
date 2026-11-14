@@ -1,25 +1,51 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { UserRole } from '../types';
-import { Shield, Lock, User, ArrowRight, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Shield, Lock, User, ArrowRight, Sparkles, AlertCircle, Mail, Phone, FileText, UserPlus } from 'lucide-react';
 
 export const Login: React.FC = () => {
-  const { login, setDemoUser } = useAuth();
+  const { login, register, setDemoUser } = useAuth();
+  const [authMode, setAuthMode] = useState<'signin' | 'register'>('signin');
   const [selectedRole, setSelectedRole] = useState<UserRole>('POLICYHOLDER');
   const [username, setUsername] = useState('policyholder_priya');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('Claim@123');
+  const [policyNumber, setPolicyNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleRoleTabChange = (role: UserRole) => {
     setSelectedRole(role);
     setErrorMessage(null);
-    if (role === 'ADJUSTER') {
-      setUsername('adjuster_raj');
-      setPassword('Adjuster@123');
+    if (authMode === 'signin') {
+      if (role === 'ADJUSTER') {
+        setUsername('adjuster_raj');
+        setPassword('Adjuster@123');
+      } else {
+        setUsername('policyholder_priya');
+        setPassword('Claim@123');
+      }
+    }
+  };
+
+  const handleModeSwitch = (mode: 'signin' | 'register') => {
+    setAuthMode(mode);
+    setErrorMessage(null);
+    if (mode === 'register') {
+      setUsername('');
+      setPassword('');
+      setEmail('');
+      setPolicyNumber('');
+      setPhoneNumber('');
     } else {
-      setUsername('policyholder_priya');
-      setPassword('Claim@123');
+      if (selectedRole === 'ADJUSTER') {
+        setUsername('adjuster_raj');
+        setPassword('Adjuster@123');
+      } else {
+        setUsername('policyholder_priya');
+        setPassword('Claim@123');
+      }
     }
   };
 
@@ -29,11 +55,31 @@ export const Login: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      await login(username, password);
+      if (authMode === 'signin') {
+        await login(username, password);
+      } else {
+        if (!email.trim() || !email.includes('@')) {
+          setErrorMessage('Please enter a valid email address.');
+          setIsLoading(false);
+          return;
+        }
+        if (password.length < 6) {
+          setErrorMessage('Password must be at least 6 characters long.');
+          setIsLoading(false);
+          return;
+        }
+        await register({
+          username: username.trim(),
+          email: email.trim(),
+          password,
+          role: selectedRole,
+          policy_number: policyNumber.trim() || undefined,
+          phone_number: phoneNumber.trim() || undefined
+        });
+      }
     } catch (err: any) {
       console.warn('API authentication error:', err);
-      // If backend is not yet started or credentials fail, offer friendly demo bypass
-      setErrorMessage(err.message || 'Login failed. You can click "Instant Demo Preview" below.');
+      setErrorMessage(err.message || 'Operation failed. You can click "Instant Demo Preview" below.');
     } finally {
       setIsLoading(false);
     }
@@ -59,8 +105,38 @@ export const Login: React.FC = () => {
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-3">
               <Shield className="w-6 h-6" />
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Sign In to IntelliClaim</h1>
+            <h1 className="text-2xl font-bold text-white tracking-tight">
+              {authMode === 'signin' ? 'Sign In to IntelliClaim' : 'Create New Account'}
+            </h1>
             <p className="text-sm text-slate-400 mt-1">Multi-Modal AI Vehicle Claim Adjudication</p>
+          </div>
+
+          {/* Mode Switcher Tabs */}
+          <div className="grid grid-cols-2 gap-1 p-1 bg-slate-950/90 border border-slate-800 rounded-xl mb-4">
+            <button
+              type="button"
+              onClick={() => handleModeSwitch('signin')}
+              className={`py-2 px-3 rounded-lg text-xs font-semibold transition-all flex items-center justify-center space-x-1.5 ${
+                authMode === 'signin'
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Lock className="w-3.5 h-3.5" />
+              <span>Sign In</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModeSwitch('register')}
+              className={`py-2 px-3 rounded-lg text-xs font-semibold transition-all flex items-center justify-center space-x-1.5 ${
+                authMode === 'register'
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>Create Account</span>
+            </button>
           </div>
 
           {/* Role Selector Tabs */}
@@ -106,7 +182,7 @@ export const Login: React.FC = () => {
             </div>
           )}
 
-          {/* Login Form */}
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1.5">
@@ -122,10 +198,31 @@ export const Login: React.FC = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full bg-slate-950/70 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono"
-                  placeholder="e.g. policyholder_priya"
+                  placeholder={authMode === 'register' ? 'e.g. rahul_verma' : 'e.g. policyholder_priya'}
                 />
               </div>
             </div>
+
+            {authMode === 'register' && (
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                    <Mail className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-slate-950/70 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono"
+                    placeholder="name@example.com"
+                  />
+                </div>
+              </div>
+            )}
 
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1.5">
@@ -138,6 +235,7 @@ export const Login: React.FC = () => {
                 <input
                   type="password"
                   required
+                  minLength={authMode === 'register' ? 6 : undefined}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-slate-950/70 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono"
@@ -145,6 +243,46 @@ export const Login: React.FC = () => {
                 />
               </div>
             </div>
+
+            {authMode === 'register' && selectedRole === 'POLICYHOLDER' && (
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Vehicle Policy Number <span className="text-slate-500 text-[11px]">(optional)</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="text"
+                    value={policyNumber}
+                    onChange={(e) => setPolicyNumber(e.target.value)}
+                    className="w-full bg-slate-950/70 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono"
+                    placeholder="e.g. POL-DL-2026-98765 (Auto-generated if empty)"
+                  />
+                </div>
+              </div>
+            )}
+
+            {authMode === 'register' && (
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Phone Number <span className="text-slate-500 text-[11px]">(optional)</span>
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                    <Phone className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="tel"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    className="w-full bg-slate-950/70 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono"
+                    placeholder="+91 98765 43210"
+                  />
+                </div>
+              </div>
+            )}
 
             <button
               type="submit"
@@ -158,11 +296,15 @@ export const Login: React.FC = () => {
               {isLoading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  <span>Verifying Credentials...</span>
+                  <span>{authMode === 'signin' ? 'Verifying Credentials...' : 'Creating Account...'}</span>
                 </>
               ) : (
                 <>
-                  <span>Sign In as {selectedRole === 'ADJUSTER' ? 'Adjuster' : 'Policyholder'}</span>
+                  <span>
+                    {authMode === 'signin' 
+                      ? `Sign In as ${selectedRole === 'ADJUSTER' ? 'Adjuster' : 'Policyholder'}` 
+                      : `Register as ${selectedRole === 'ADJUSTER' ? 'Adjuster' : 'Policyholder'}`}
+                  </span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
