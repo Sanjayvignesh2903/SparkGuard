@@ -67,7 +67,7 @@ export const CustomerDashboard: React.FC = () => {
       <div className="fixed inset-3 sm:inset-5 pointer-events-none border border-[#747EAD]/25 rounded-[36px] z-0" />
 
       {/* Background Soft Ambient Lighting for Floating Depth */}
-      <div className="absolute top-10 left-10 w-[80vw] h-[80vw] sm:w-[550px] sm:h-[550px] bg-[#747EAD]/20 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-10 left-10 w-[80vw] h-[80vw] max-w-[550px] max-h-[550px] bg-[#747EAD]/20 rounded-full blur-[140px] pointer-events-none" />
               <div className="absolute bottom-10 right-10 w-[80vw] h-[80vw] sm:w-[550px] sm:h-[550px] bg-[#292D54]/35 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10 space-y-6">
